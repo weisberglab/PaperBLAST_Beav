@@ -59,17 +59,17 @@ END
   foreach my $file ($hitsFile, $curatedFile) {
     die "No such file: $file\n" unless -e $file;
   }
-  my $usearch = "$Bin/usearch";
-  my $diamond = "$Bin/diamond";
-  my @exe;
-  if (defined $useDiamond) {
-    push @exe, $diamond;
-  } else {
-    push @exe, $usearch;
-  }
-  foreach my $x (@exe) {
-    die "No such executable: $x\n" unless -x $x;
-  }
+  #my $usearch = "usearch";
+  #my $diamond = "diamond";
+  #my @exe;
+  #if (defined $useDiamond) {
+  #  push @exe, $diamond;
+  #} else {
+  #  push @exe, $usearch;
+  3}
+  #foreach my $x (@exe) {
+  #  die "No such executable: $x\n" unless -x $x;
+  #}
   die "Must specify at least 1 CPU\n" unless $nCPU >= 1;
 
   my @hits = ReadTable($hitsFile, \@infields);
@@ -102,9 +102,9 @@ END
 
     my $cmd;
     if (defined $useDiamond) {
-      $cmd = "$diamond blastp --query $faaCand --db $curatedFile --id 0.3 --evalue 0.01 --out $rhitsFile --very-sensitive --outfmt 6 --masking $qmask --threads $nCPU";
+      $cmd = "diamond blastp --query $faaCand --db $curatedFile --id 0.3 --evalue 0.01 --out $rhitsFile --very-sensitive --outfmt 6 --masking $qmask --threads $nCPU";
     } else {
-      $cmd = "$usearch -ublast $faaCand -db $curatedFile -id 0.3 -evalue 0.01 -blast6out $rhitsFile -qmask $qmask -threads $nCPU";
+      $cmd = "usearch -ublast $faaCand -db $curatedFile -id 0.3 -evalue 0.01 -blast6out $rhitsFile -qmask $qmask -threads $nCPU";
     }
     $cmd .= " > /dev/null 2>&1";
     system($cmd) == 0 || die "Error running $cmd: $!\n";
