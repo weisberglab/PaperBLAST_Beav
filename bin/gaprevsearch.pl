@@ -66,7 +66,7 @@ END
   #  push @exe, $diamond;
   #} else {
   #  push @exe, $usearch;
-  3}
+  #}
   #foreach my $x (@exe) {
   #  die "No such executable: $x\n" unless -x $x;
   #}
