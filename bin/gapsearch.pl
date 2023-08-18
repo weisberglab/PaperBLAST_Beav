@@ -64,18 +64,18 @@ END
   die "maxWeak must be positive\n" unless $maxWeak > 0;
 
   my $binDir = $RealBin;
-  my $hmmsearch = "$binDir/hmmsearch";
-  my $usearch = "$binDir/usearch";
-  my $diamond = "$binDir/diamond";
-  my @exe = ($hmmsearch);
-  if (defined $useDiamond) {
-    push @exe, $diamond;
-  } else {
-    push @exe, $usearch;
-  }
-  foreach my $b (@exe) {
-    die "No such file or not executable: $b\n" unless -x $b;
-  }
+  #my $hmmsearch = "$binDir/hmmsearch";
+  #my $usearch = "$binDir/usearch";
+  #my $diamond = "$binDir/diamond";
+  #my @exe = ($hmmsearch);
+  #if (defined $useDiamond) {
+  #  push @exe, $diamond;
+  #} else {
+  #  push @exe, $usearch;
+  #}
+  #foreach my $b (@exe) {
+  #  die "No such file or not executable: $b\n" unless -x $b;
+  #}
   foreach my $suffix (qw{org faa}) {
     die "No such file: $orgprefix.$suffix\n" unless -e "$orgprefix.$suffix";
   }
@@ -147,7 +147,7 @@ END
     $hmmTmp{$hmmId} = $tmpfile;
     if (fork() == 0) {
       # the child process
-      my @cmd = ($hmmsearch, "--cut_tc", "-o", "/dev/null", "--domtblout", $tmpfile, $hmmFileName, $aaIn);
+      my @cmd = ("hmmsearch", "--cut_tc", "-o", "/dev/null", "--domtblout", $tmpfile, $hmmFileName, $aaIn);
       print STDERR "Running $hmmId\n" if defined $verbose;
       system(@cmd) == 0 || die "$@cmd failed: $!";
       print STDERR "$hmmId finished\n" if defined $verbose;
@@ -191,14 +191,14 @@ END
     # By default, diamond returns just 25 alignments, which is not enough if comparing to
     # many genomes.
     $cmd = join(" ",
-                $diamond, "blastp", "--query", $cfile, "--db", $aaIn.".dmnd",
+                "diamond", "blastp", "--query", $cfile, "--db", $aaIn.".dmnd",
                  "--evalue", 0.01, "--id", 0.3,
                  "--out", "$cfile.hits", "--very-sensitive", "--outfmt", 6,
                 "--max-target-seqs", 25 * scalar(@orgs),
                  "--threads", $nCPU);
   } else {
     $cmd = join(" ",
-                $usearch, "-ublast", $cfile, "-db", $aaIn,
+                "usearch", "-ublast", $cfile, "-db", $aaIn,
                 "-evalue", 0.01, "-id", 0.3,
                 "-blast6out", "$cfile.hits",
                 "-threads", $nCPU);
