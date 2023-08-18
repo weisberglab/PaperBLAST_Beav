@@ -87,7 +87,7 @@ END
   my %orgs = map { $_->{orgId} => $_ } @orgs;
   my $aaIn = "$orgprefix.faa";
   if (defined $useDiamond) {
-    die "No such file: $aaIn.dmnd -- use\n  $diamond makedb --in $aaIn -d $aaIn.dmnd\nto create it\n"
+    die "No such file: $aaIn.dmnd -- use\n  diamond makedb --in $aaIn -d $aaIn.dmnd\nto create it\n"
       unless -e "$aaIn.dmnd";
   }
   if (defined $pathSpec) {
